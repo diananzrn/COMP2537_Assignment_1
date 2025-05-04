@@ -187,7 +187,7 @@ app.post('/loggingin', async (req,res) => {
 
 app.get('/members', (req,res) => {
     if (!req.session.authenticated) {
-        res.redirect('/');
+        res.redirect('/login');
         return;
     }
 
