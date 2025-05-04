@@ -95,11 +95,11 @@ app.get('/nosql-injection', async (req, res) => {
 
 app.get('/signup', (req,res) => {
     var html = `
-    Create user:
+    Create user:<br>
     <form action='/submitUser' method='post'>
-    <input name='name' type='text' placeholder='name'>
-    <input name='email' type='text' placeholder='email'>
-    <input name='password' type='password' placeholder='password'>
+    <input name='name' type='text' placeholder='name'><br>
+    <input name='email' type='text' placeholder='email'><br>
+    <input name='password' type='password' placeholder='password'><br>
     <button>Submit</button>
     </form>`;
     res.send(html);
@@ -118,13 +118,13 @@ app.post('/submitUser', async (req,res) => {
 
     const validationResult = schema.validate({name, email, password});
     if (validationResult.error != null) {
-        res.send("Invalid input: " + validationResult.error.details[0].message + `<form action="/signup" method="get"><button>Try again</button></form>`);
+        res.send("Invalid input: " + validationResult.error.details[0].message + `<a href='/signup'>Try again</a>`);
         return;
     }
 
     const existingUser = await userCollection.findOne({email: email});
     if (existingUser) {
-        res.send("This email is already registered. <form action='/signup' method='get'><button>Try again</button></form>");
+        res.send("This email is already registered. <a href='/signup'>Try again</a>");
         return;
     }
 
@@ -142,10 +142,10 @@ app.post('/submitUser', async (req,res) => {
 
 app.get('/login', (req,res) => {
     var html = `
-    Log in:
+    Log in:<br>
     <form action='/loggingin' method='post'>
-    <input name='email' type='text' placeholder='email'>
-    <input name='password' type='password' placeholder='password'>
+    <input name='email' type='text' placeholder='email'><br>
+    <input name='password' type='password' placeholder='password'><br>
     <button>Submit</button>
     </form>`;
     res.send(html);
@@ -162,13 +162,13 @@ app.post('/loggingin', async (req,res) => {
 
     const validationResult = schema.validate({email, password});
     if (validationResult.error != null) {
-        res.send("Invalid input. <form action='/login' method='get'><button>Try again</button></form>");
+        res.send("Invalid input. <a href='/login'>Try again</a>");
         return;
     }
 
     const result = await userCollection.find({email: email}).project({name: 1, email: 1, password: 1}).toArray();
     if (result.length != 1) {
-        res.send("Email not found. <form action='/login' method='get'><button>Try again</button></form>");
+        res.send("Email not found. <a href='/login'>Try again</a>");
         return;
     }
 
@@ -180,7 +180,7 @@ app.post('/loggingin', async (req,res) => {
         res.redirect('/members');
         return;
     } else {
-        res.send("Invalid email/password combination. <form action='/login' method='get'><button>Try again</button></form>");
+        res.send("Invalid email/password combination. <a href='/login'>Try again</a>");
         return;
     }
 });
@@ -194,17 +194,15 @@ app.get('/members', (req,res) => {
     var randomCatID = Math.floor(Math.random() * 3) + 1;
     var cat;
     if (randomCatID == 1) {
-        cat = "Fluffy: <img src='/fluffy.gif' style='width:250px;'>";
+        cat = "<img src='/fluffy.gif' style='width:250px;'>";
     } else if (randomCatID == 2) {
-        cat = "Socks: <img src='/socks.gif' style='width:250px;'>";
+        cat = "<img src='/socks.gif' style='width:250px;'>";
     } else {
-        cat = "Trumpet: <img src='/trumpet.gif' style='width:250px;'>";
+        cat = "<img src='/trumpet.gif' style='width:250px;'>";
     }
 
     var html = `
     <h1>Hello, ${req.session.name}.</h1>
-    <h2>Welcome to the members area.</h2>
-    <h2>Here is a random cat for you:</h2>
     <h2>${cat}</h2>
     <form action='/logout' method='get'>
     <button>Log out</button>
@@ -214,7 +212,7 @@ app.get('/members', (req,res) => {
 
 app.get('/logout', (req,res) => {
     req.session.destroy();
-    res.send("You are logged out. <a href='/'>Go home</a>");
+    res.redirect('/');
 });
 
 app.use(express.static(__dirname + "/public"));
@@ -225,5 +223,5 @@ app.get("*", (req,res) => {
 });
 
 app.listen(port, () => {
-    console.log("Node application listening on port "+port);
+    console.log(`Server running at http://localhost:${port}`);
 });
