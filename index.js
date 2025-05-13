@@ -159,12 +159,11 @@ app.post('/submitUser', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    await userCollection.insertOne({ name, email, user_type, password: hashedPassword });
+    await userCollection.insertOne({ name, email, user_type: "user", password: hashedPassword });
 
     req.session.authenticated = true;
     req.session.name = name;
     req.session.email = email;
-    req.session.user_type = "user";
     req.session.cookie.maxAge = expireTime;
 
     return res.render("members", {
