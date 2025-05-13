@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+  <div>
+    <strong><%= user.name %></strong>
+    (<%= user.user_type %>)
+  </div>
+  <div class="d-flex gap-2">
+    <a href="/admin/promote/<%= user.email %>" class="btn btn-danger btn-sm">Promote to Admin</a>
+    <a href="/admin/demote/<%= user.email %>" class="btn btn-success btn-sm">Demote to User</a>
+  </div>
+</div>

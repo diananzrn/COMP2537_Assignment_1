@@ -1,0 +1,32 @@
+<%- include("templates/header") %> 
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+  <% if (authenticated) { %>
+    <p class="mb-4">Hello, <%= name %>!</p>
+
+    <div class="d-flex gap-3">
+      <form action="/members" method="get">
+        <button class="btn btn-primary" type="submit">Go to members page!</button>
+      </form>
+
+      <form action="/logout" method="get">
+        <button class="btn btn-primary" type="submit">Log Out</button>
+      </form>
+    </div>
+
+  <% } else { %>
+
+    <div class="d-flex gap-3">
+      <form action="/signup" method="get">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+      </form>
+
+      <form action="/login" method="get">
+        <button class="btn btn-primary" type="submit">Log in</button>
+      </form>
+    </div>
+
+  <% } %>
+</div>
+
+<%- include("templates/footer") %>
