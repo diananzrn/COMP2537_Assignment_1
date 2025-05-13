@@ -167,7 +167,9 @@ app.post('/submitUser', async (req, res) => {
     req.session.user_type = "user";
     req.session.cookie.maxAge = expireTime;
 
-    res.render("/members");
+    return res.render("members", {
+    user: name,
+    });
 });
 
 
@@ -217,7 +219,9 @@ app.post('/loggingin', async (req, res) => {
         req.session.user_type = result[0].user_type || "user";
         req.session.cookie.maxAge = expireTime;
 
-        return res.redirect('/members');
+        return res.render("members", {
+            user: result[0].name,
+        });
     } else {
         return res.status(401).render("login", {
             error: "Invalid email/password combination.",
